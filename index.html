@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Content Calendar System</title>
+  <title>Content Calendar</title>
   <style>
     /* Reset & base */
     * {
@@ -226,7 +226,7 @@
   <div id="calendar"></div>
 
   <form id="upload-form">
-    <h2>📤 Upload Poster</h2>
+    <h2>📤 Upload Content</h2>
     <input type="file" id="file" accept="image/*" />
     <input type="date" id="date" />
     <input type="text" id="caption" placeholder="Caption (optional)" />
@@ -331,4 +331,12 @@
     }
   </script>
 </body>
+  <footer style="background-color: #aec6cf; color: #333; text-align: center; padding: 1rem; font-size: 0.9rem; width: 100%;">
+  &copy; <span id="year"></span> @Cyndev. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 </html>
