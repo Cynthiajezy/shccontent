@@ -245,6 +245,110 @@
   </a>
 
   <script>
+
+     document.getElementById('upload-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const fileInput = document.getElementById('file');
+  const dateInput = document.getElementById('date');
+  const captionInput = document.getElementById('caption');
+
+  const file = fileInput.files[0];
+  if (!file || !dateInput.value) {
+    alert('Please select a file and a date!');
+    return;
+  }
+
+  const url = URL.createObjectURL(file);
+  const caption = captionInput.value;
+
+  // Create container for img + delete btn
+  const container = document.createElement('div');
+  container.style.position = 'relative';
+  container.style.display = 'inline-block';
+
+  // Image element
+  const img = document.createElement('img');
+  img.src = url;
+  img.alt = caption;
+  img.title = caption;
+
+  img.style.width = '180px'; // match your gallery img style
+  img.style.height = '120px';
+  img.style.objectFit = 'cover';
+  img.style.borderRadius = '10px';
+  img.style.cursor = 'pointer';
+  img.style.boxShadow = '0 4px 12px rgb(0 0 0 / 0.1)';
+  img.style.transition = 'transform 0.2s ease';
+
+  img.addEventListener('click', () => {
+    fullImg.src = url;
+    fullscreen.style.display = 'flex';
+  });
+
+  // Delete button
+  const delBtn = document.createElement('button');
+  delBtn.textContent = '×';
+  delBtn.title = 'Delete this poster';
+  delBtn.style.position = 'absolute';
+  delBtn.style.top = '5px';
+  delBtn.style.right = '5px';
+  delBtn.style.background = 'rgba(255,0,0,0.8)';
+  delBtn.style.color = 'white';
+  delBtn.style.border = 'none';
+  delBtn.style.borderRadius = '50%';
+  delBtn.style.width = '24px';
+  delBtn.style.height = '24px';
+  delBtn.style.cursor = 'pointer';
+  delBtn.style.fontWeight = '700';
+  delBtn.style.fontSize = '18px';
+  delBtn.style.lineHeight = '20px';
+  delBtn.style.padding = '0';
+  delBtn.style.userSelect = 'none';
+
+  delBtn.addEventListener('click', (event) => {
+    event.stopPropagation(); // prevent triggering img click fullscreen
+
+    // Remove from calendar events
+    let eventToRemove = calendar.getEvents().find(ev => ev.startStr === dateInput.value && (ev.title === caption || ev.title === file.name));
+    if (eventToRemove) {
+      eventToRemove.remove();
+    }
+
+    // Remove from posters array
+    posters = posters.filter(p => !(p.date === dateInput.value && p.url === url));
+
+    // Remove the container from gallery
+    container.remove();
+
+    alert('Poster deleted! No more regrets.');
+  });
+
+  container.appendChild(img);
+  container.appendChild(delBtn);
+  galleryEl.appendChild(container);
+
+  // Add event to calendar
+  calendar.addEvent({
+    title: caption || file.name,
+    start: dateInput.value,
+  });
+
+  // Save poster info
+  posters.push({
+    date: dateInput.value,
+    url: url,
+    caption: caption,
+  });
+
+  // Reset form
+  fileInput.value = '';
+  dateInput.value = '';
+  captionInput.value = '';
+
+  alert("Poster uploaded and locked in! Check the gallery or calendar to see it shine ✨");
+});
+
+    
     const calendarEl = document.getElementById('calendar');
     const galleryEl = document.getElementById('gallery');
     const fullscreen = document.getElementById('fullscreen');
