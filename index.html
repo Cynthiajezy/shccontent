@@ -433,41 +433,6 @@
         el.scrollIntoView({ behavior: 'smooth' });
       }
     }
-
-
-    async function uploadImage() {
-      const fileInput = document.getElementById("fileUpload");
-      const file = fileInput.files[0];
-
-      if (!file) {
-        alert("Please select a file first!");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "ceejezy"); // Your Cloudinary preset
-
-      try {
-        const res = await fetch("https://api.cloudinary.com/v1_1/dux8tggwr/image/upload", {
-          method: "POST",
-          body: formData
-        });
-
-        if (!res.ok) throw new Error('Upload failed, try again.');
-
-        const data = await res.json();
-        console.log(data);
-
-        document.getElementById("uploadStatus").innerText = "Upload successful!";
-        const img = document.getElementById("uploadedImage");
-        img.src = data.secure_url;
-        img.style.display = "block";
-      } catch (error) {
-        console.error(error);
-        alert("Oops, something went wrong. Try again.");
-      }
-
       
   </script>
 </body>
